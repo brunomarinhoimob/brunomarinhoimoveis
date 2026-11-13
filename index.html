@@ -19,6 +19,13 @@
   gtag('js', new Date());
   gtag('config', 'G-MKXTKM8G8T');
 </script>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1147097678020135');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1147097678020135&ev=PageView&noscript=1"/></noscript>
 <meta property="og:locale" content="pt_BR">
 
 <!-- ============================================================
@@ -951,7 +958,13 @@
     var safe = {};
     Object.keys(params).forEach(function(k){ if (k !== 'nome' && k !== 'whats') safe[k] = params[k]; }); // nunca enviar nome/telefone para analytics
     if (typeof window.gtag === 'function') { try { window.gtag('event', name, safe); } catch(e){} }
-    if (typeof window.fbq === 'function') { try { window.fbq('trackCustom', name, safe); } catch(e){} }
+    if (typeof window.fbq === 'function') {
+      try {
+        if (name === 'form_submit') window.fbq('track', 'Lead', safe);
+        else if (name === 'whatsapp_click') window.fbq('track', 'Contact', safe);
+        else window.fbq('trackCustom', name, safe);
+      } catch(e){}
+    }
     console.log('[track]', name, params);
   }
 
