@@ -11,6 +11,14 @@
 <meta property="og:description" content="Análise gratuita e personalizada. Responda 3 perguntas e veja o que combina com o seu perfil em Fortaleza.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://brunomarinhoimoveis.com.br/">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MKXTKM8G8T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-MKXTKM8G8T');
+</script>
 <meta property="og:locale" content="pt_BR">
 
 <!-- ============================================================
@@ -940,8 +948,10 @@
   window.dataLayer = window.dataLayer || [];
   function trackEvent(name, params){
     params = params || {};
-    window.dataLayer.push(Object.assign({event:name}, params));
-    if (typeof window.fbq === 'function') { try { window.fbq('trackCustom', name, params); } catch(e){} }
+    var safe = {};
+    Object.keys(params).forEach(function(k){ if (k !== 'nome' && k !== 'whats') safe[k] = params[k]; }); // nunca enviar nome/telefone para analytics
+    if (typeof window.gtag === 'function') { try { window.gtag('event', name, safe); } catch(e){} }
+    if (typeof window.fbq === 'function') { try { window.fbq('trackCustom', name, safe); } catch(e){} }
     console.log('[track]', name, params);
   }
 
@@ -1150,7 +1160,7 @@
   document.querySelectorAll('a[href*="instagram.com/brunomarinhoimoveis"]').forEach(function(a){
     a.addEventListener('click', function(){
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({event:'instagram_click'});
+      if (typeof gtag === 'function') gtag('event','instagram_click');
       if (typeof fbq === 'function') fbq('trackCustom','InstagramClick');
     });
   });
